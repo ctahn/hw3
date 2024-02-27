@@ -1,5 +1,4 @@
 #include "llrec.h"
-#include <iostream>
 using namespace std;
 //*********************************************
 // Provide your implementation of llpivot below
@@ -9,7 +8,6 @@ using namespace std;
 void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot){
   if(head == nullptr){
     if(smaller == nullptr && larger == nullptr){
-      cout << "Empty list" << endl;
       return;
     }
     larger = nullptr;

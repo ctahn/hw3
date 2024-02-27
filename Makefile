@@ -11,8 +11,8 @@ heap: heap_test
 #-----------------------------------------------------
 # ADD target(s) to build your llrec-test executable
 #-----------------------------------------------------
-llrec-test: llrec-test.o stack.o
-	$(CXX) $(CXXFLAGS) -o $@ llrec-test.cpp llrec.cpp llrec.h stack.h stack_test.cpp
+llrec-test: llrec-test.o 
+	$(CXX) $(CXXFLAGS) -o $@ llrec-test.cpp llrec.cpp llrec.h 
 
 llrec-test.o: llrec-test.cpp llrec.cpp llrec.h
 	$(CXX) $(CXXFLAGS) -o $@ -c llrec-test.cpp 
