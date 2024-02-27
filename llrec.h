@@ -3,7 +3,7 @@
 #ifndef NULL
 #define NULL 0
 #endif
-
+#include <iostream>
 /**
  * Node struct for both problems
  */
@@ -80,11 +80,24 @@ Node* llfilter(Node* head, Comp pred);
 template <typename Comp>
 Node* llfilter(Node* head, Comp pred)
 {
-    //*********************************************
-    // Provide your implementation below
-    //*********************************************
-
-
+  if(head == nullptr){
+    return nullptr;
+  }
+  if(!pred(head->val)){
+    head->next = llfilter(head->next, pred);
+    return head;
+  }
+  else{
+    Node* temp = head;
+    head = llfilter(head->next, pred);
+    delete temp;
+    return head;
+  }
 }
+
+struct isOdd{
+  bool operator()(int x) {return x%2 != 0;} 
+};
+
 
 #endif

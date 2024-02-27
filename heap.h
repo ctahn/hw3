@@ -2,9 +2,12 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
+#include <cmath>
+#include <vector>
+#include <iostream>
 
 template <typename T, typename PComparator = std::less<T> >
-class Heap
+class Heap : private std::vector<T>
 {
 public:
   /**
@@ -59,16 +62,82 @@ public:
    */
   size_t size() const;
 
+  void print() const;
+
 private:
-  /// Add whatever helper functions and data members you need below
-
-
-
-
+  std::vector<T> vec;
+  void trickle_down(int idx);
+  void trickle_up(int loc);
+  PComparator comp;
+  int mary;
 };
 
-// Add implementation of member functions here
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::print() const
+{
+  for(size_t i = 0; i < vec.size(); i++){
+    std::cout << this->vec[i] << " ";
+  }
+  std::cout << std::endl;
+}
 
+
+// Add implementation of member functions here
+template <typename T, typename PComparator>
+Heap<T,PComparator>::Heap(int m, PComparator c)
+{
+  comp = c;
+  mary = m;
+}
+
+template <typename T, typename PComparator>
+Heap<T,PComparator>::~Heap()
+{
+}
+
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::trickle_up(int loc)
+{
+  int parent = (int)((loc-1)/mary);
+  if(loc == 1 && comp(vec[1], vec[0])){
+    T temp = vec[1];
+    vec[1] = vec[0];
+    vec[0] = temp;
+    return;
+  }
+  while(parent >= 0 && comp(vec[loc],vec[parent])){
+    T temp = vec[loc];
+    vec[loc] = vec[parent];
+    vec[parent] = temp;
+    loc = parent;
+    parent = (int)((loc-1)/mary);
+  }
+}
+
+
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::trickle_down(int idx)
+{
+  int leftChild = mary*idx+1;
+  int smallerChild = leftChild;
+  if(smallerChild >= (int)(vec.size())){
+    return;
+  }
+  for(int i = 1; i < mary;i++){
+    if((leftChild+i) < (int)(vec.size())){
+      int rChild = (leftChild + i);
+      if(comp(vec[rChild],vec[smallerChild])){
+        smallerChild = rChild;
+      }
+    }
+  }
+  if(comp(vec[smallerChild],vec[idx])){
+    T temp = vec[idx];
+    vec[idx] = vec[smallerChild];
+    vec[smallerChild] = temp;
+    this->trickle_down(smallerChild);
+  }
+}
 
 // We will start top() for you to handle the case of 
 // calling top on an empty heap
@@ -78,17 +147,11 @@ T const & Heap<T,PComparator>::top() const
   // Here we use exceptions to handle the case of trying
   // to access the top element of an empty heap
   if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-
-
+    throw std::underflow_error("Heap is empty");
   }
   // If we get here we know the heap has at least 1 item
   // Add code to return the top element
-
-
-
+  return vec[0];
 }
 
 
@@ -98,18 +161,33 @@ template <typename T, typename PComparator>
 void Heap<T,PComparator>::pop()
 {
   if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-
-
+    throw std::underflow_error("Heap is empty");
   }
-
-
-
+  T temp = vec[0];
+  vec[0] = vec[vec.size()-1];
+  vec[vec.size()-1] = temp;
+  vec.pop_back();
+  this->trickle_down(0);
 }
 
+template <typename T, typename PComparator>
+bool Heap<T,PComparator>::empty() const
+{
+  return vec.std::vector<T>::empty();
+}
 
+template <typename T, typename PComparator>
+size_t Heap<T,PComparator>::size() const
+{
+  return vec.std::vector<T>::size();
+}
+
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::push(const T& item)
+{
+  vec.push_back(item);
+  this->trickle_up(vec.size()-1);
+}
 
 #endif
 

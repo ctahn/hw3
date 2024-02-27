@@ -86,8 +86,15 @@ int main(int argc, char* argv[])
     print(head);
 
     // Test out your linked list code
-
-
+    Node* lesser = nullptr;
+    Node* greater = nullptr;
+    llpivot(head, lesser, greater, 6);
+    print(lesser);
+    print(greater);
+    Node* test = greater;
+    isOdd c;
+    test = llfilter(test, c);
+    print(test);
 
     
     return 0;
